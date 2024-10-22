@@ -1,49 +1,23 @@
-from unittest.mock import MagicMock
+
 
 import pytest
-from sqlalchemy import True_
+
 
 from app.DAO.models.movie import Movie
 from app.DAO.movieDAO import MovieDAO
-from app.contener import movie_dao
-from app.service.movie_service import MovieService
 from configuration.database import db
 from main import app
 
 
-# @pytest.fixture()
-# def movie_dao_config():
-#     movie = MovieDAO(None)
-#     movie_one = Movie(id=1,
-#                       title='title test one',
-#                       description='description test one',
-#                       trailer='trailer test one',
-#                       year=2001,
-#                       rating=1.1,
-#                       genre_id=1,
-#                       director_id=1
-#                       )
-#     movie_two = Movie(id=2,
-#                       title='title test two',
-#                       description='description test two',
-#                       trailer='trailer test two',
-#                       year=2002,
-#                       rating=2.2,
-#                       genre_id=2,
-#                       director_id=2)
-#     movie.add_movie = MagicMock(return_value=True)
-#     return movie
 
-
-# @pytest.fixture()
 class TestMovieDAO:
     @pytest.fixture(autouse=True)
     def config_for_test(self):
         self.movie = MovieDAO(db.session)
 
     def test_one_movie(self):
-        # with app.app_context():
-        result = self.movie.get_one_movie(7)
+        with app.app_context():
+            result = self.movie.get_one_movie(7)
         print(result)
         assert result.id == 7
         assert self.movie.get_one_movie(None) == False
@@ -88,8 +62,7 @@ class TestMovieDAO:
 
         #
         assert self.movie.create_movie_for_test(data) == True
-        # print(result_add)
-        # assert result_add == True
+
 
     def test_movie_update(self):
 

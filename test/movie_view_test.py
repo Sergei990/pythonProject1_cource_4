@@ -44,8 +44,7 @@ class TestMovieViewOne:
         result = self.movie_view.get(data)
         assert result.get('title') == 'title test one'
         assert result is not None
-    # def test_movie(self):
-    #     result = self.movie_view.get(None)
+
     #
 
 class TestMovieViews:

@@ -6,15 +6,29 @@ class UserDAO:
         self.session = session
 
     def get_all_user(self):
+        """
+
+        :return: Возвращает список словарей
+        """
         return self.session.query(User).all()
 
     def get_user_one(self, uid):
+        """
+
+        :param uid: Получает id пользователя
+        :return: Возвращает словарь с одним пользователем
+        """
         try:
             return self.session.query(User).filter(User.id == uid).one()
         except Exception:
             return False
 
     def add_user(self, data):
+        """ Добавляет пользователя в БД
+
+        :param data: Получат словарь
+        :return: возвращает True если пользователь добавлен, или false если пользователь не добавлен
+        """
         try:
             with self.session.begin():
                 self.session.add(User(**data))
@@ -26,6 +40,7 @@ class UserDAO:
             return False
 
     def update_user(self, new_user):
+
         try:
             self.session.add(new_user)
             self.session.commit()
@@ -49,11 +64,9 @@ class UserDAO:
 
         return self.session.query(User).filter(User.username == name).all()
 
-    def get_user_by_email(self,email):
+    def get_user_by_email(self, email):
         try:
             result_user_by_email = self.session.query(User).filter(User.email == email).one()
             return result_user_by_email
         except Exception as e:
             return False
-    # def get_user_for_check_password(self):
-    #     try:

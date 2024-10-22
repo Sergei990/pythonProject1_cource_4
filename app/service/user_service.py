@@ -21,7 +21,7 @@ class UserService:
         """
          добавляет нового пользователя в таблицу
         :param data_add: словарь {username:"Кто-то", password : какой-то, role : кем=то
-        :return: возвращает ответ 201 если все хорошо и 400 если все плохо
+        :return: возвращает  201 если все хорошо и 400 если все плохо
         """
         del data_add['password_2']
         password = data_add['password']
@@ -30,7 +30,7 @@ class UserService:
         data_add['password'] = modified_password
         answer = self.dao_user.add_user(data_add)
         if not answer:
-            return "not", 400
+            return "Такой email уже есть", 400
         return "yes", 201
 
     def update_user(self, data_update):

@@ -5,8 +5,6 @@ from flask_restx import Namespace, Resource, abort
 
 from app.contener import genre_service, auth_user, access, genre_schema, genre_schemas
 
-# from dicoration_for_auth.dicorators import admin_receiver
-
 genres_ns = Namespace('genres')
 
 
@@ -14,6 +12,10 @@ genres_ns = Namespace('genres')
 class GenreView(Resource):
     # @admin_receiver
     def post(self):
+        """
+
+        :return:
+        """
         if 'Authorization' not in request.headers:
             abort(401)
         data = request.headers.get('Authorization')
@@ -27,13 +29,24 @@ class GenreView(Resource):
         query = request.json
         return genre_service.add_new_genre(query)
 
+
 @genres_ns.route('/<int:gid>')
 class GenreViewUD(Resource):
 
-    def get(self,gid):
+    def get(self, gid):
+        """
+
+        :param gid:
+        :return:
+        """
         return genre_schema.dump(genre_service.get_one_genre(gid)), 200
 
     def put(self, gid):
+        """
+
+        :param gid:
+        :return:
+        """
         if 'Authorization' not in request.headers:
             abort(401)
         data = request.headers.get('Authorization')
@@ -47,9 +60,13 @@ class GenreViewUD(Resource):
         query['id'] = gid
         return genre_service.update_genre(query)
 
-    def delete(self,gid):
+    def delete(self, gid):
+        """
+
+        :param gid:
+        :return:
+        """
         result = access.auth_required()
         if not result:
             return result
         return genre_service.delete_genre(gid)
-

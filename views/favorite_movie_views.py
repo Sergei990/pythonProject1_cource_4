@@ -1,5 +1,3 @@
-
-
 from flask import request
 from flask_restx import Namespace, Resource, abort
 
@@ -13,7 +11,13 @@ favorites_ns = Namespace('favorites/movies')
 @favorites_ns.route('/<int:movie_id>')
 class FavoriteMovieView(Resource):
 
-    def post(self,movie_id):
+    def post(self, movie_id):
+        """
+        добавляет понравившейся фильм в бд
+        :param movie_id: Iniger id
+        :return: Возвращает код 201, если фильм успешно добавлен, 400 если фильм не добавлен.
+        204 если фильма нет в бд
+        """
         get_token = request.headers
         if 'Authorization' not in get_token:
             abort(401)
@@ -28,8 +32,8 @@ class FavoriteMovieView(Resource):
         if not result_searhs_movie:
             return ' Not movie', 204
         data_movie = {
-            "id_movie":movie_id,
-            "id_user":result_check_token.get('id')
+            "id_movie": movie_id,
+            "id_user": result_check_token.get('id')
         }
         print(data_movie)
         result_add_like_movie = favorite_movie_for_user_service.add_favorite_movie(data_movie)
@@ -38,7 +42,11 @@ class FavoriteMovieView(Resource):
         return "Yes add movie ", 201
 
     def delete(self, movie_id):
-
+        """
+        Удаляет понравившейся фильм
+        :param movie_id: Поучает Фильм по id
+        :return:
+        """
         header = request.headers
         if 'Authorization' not in header:
             abort(401)
@@ -48,16 +56,19 @@ class FavoriteMovieView(Resource):
         if not result_check_token:
             abort(403)
         id_user = result_check_token.get('id')
-        result = favorite_movie_for_user_service.delete_favorite_movie(movie_id,id_user)
+        result = favorite_movie_for_user_service.delete_favorite_movie(movie_id, id_user)
         if not result:
             return 'Not delete', 204
         return ',', 201
 
 
-
 @favorites_ns.route("/")
 class ReadeFavoriteMovie(Resource):
     def get(self):
+        """
+
+        :return: Возвращает словарь c фильмami
+        """
         result_header_for_get_movie = request.headers
 
         if 'Authorization' not in result_header_for_get_movie:
@@ -70,12 +81,8 @@ class ReadeFavoriteMovie(Resource):
         result_check_token = favorite_movie_for_user_service.check_token_for_favorite_movie(result_user)
         if not result_check_token:
             abort(401)
-        # print(result_check_token)
-        result_search_user = result_check_token.get('id')
-        # print(result_search_user)
-        result_movies = favorite_movie_for_user_service.get_all_movie_lick(result_search_user)
-        print(result_movies)
-        # print(result_movies, result_search_user)
-        # result_movies_from_table = movie_service.
-        return movie_sterilisations.dump(result_movies)
 
+        result_search_user = result_check_token.get('id')
+
+        result_movies = favorite_movie_for_user_service.get_all_movie_lick(result_search_user)
+        return movie_sterilisations.dump(result_movies)

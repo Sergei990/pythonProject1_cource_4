@@ -5,10 +5,10 @@ class DirectorDAO:
     def __init__(self, session):
         self.session = session
 
-    def get_all_directors(self):
+    def get_all_directors_DAO(self):
         return self.session.query(Director).all()
 
-    def get_one_director(self, did):
+    def get_one_director_DAO(self, did):
         """
         В
         :param did: integer получаем id
@@ -21,7 +21,7 @@ class DirectorDAO:
         except Exception:
             return False
 
-    def add(self, data):
+    def add_new_director_DAO(self, data):
         """
         Добавляет нового режиссера в таблицу
         :param data: данные нового режиссера
@@ -35,7 +35,7 @@ class DirectorDAO:
             self.session.rollback()
             return False
 
-    def update(self, update_director):
+    def update_director_DAO(self, update_director):
         """
         Изменяет данные о режиссере
         :param update_director: Новые данные режиссера
@@ -49,7 +49,7 @@ class DirectorDAO:
             self.session.rollback()
             return False
 
-    def delete(self, delete_director):
+    def delete_director_DAO(self, delete_director):
         """
         удаляет режиссера
         :param delete_director: integer,

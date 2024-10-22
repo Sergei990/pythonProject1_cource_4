@@ -12,7 +12,7 @@ from flask import request
 from flask_restx import abort
 
 # from app.contener import auth_user
-from configuration.constante import JWT_SECRET, JWT_ALGO
+# from configuration.constante import JWT_SECRET, JWT_ALGO
 
 
 # from main import app

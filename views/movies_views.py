@@ -1,17 +1,7 @@
-# from argparse import Namespace
-
-from flask import request
+from flask import request, current_app
 from flask_restx import Namespace, Resource, abort
 
-# from app.DAO.dicoration_for_auth.password import auth_requi
 from app.contener import movie_sterilisations, movie_service, auth_user, movie_sterilisation
-from dicoration_for_auth.dicorators import auth_required
-
-# from main import auth_required
-
-# from dicoration_for_auth.password import auth_required
-
-# from main import auth_required
 
 movies_ns = Namespace('movies')
 
@@ -20,7 +10,12 @@ movies_ns = Namespace('movies')
 @movies_ns.route('/')
 class MovieView(Resource):
 
+
     def get(self):
+        """
+
+        :return:
+        """
         # auth = request.headers
         # if  'Authorization' not in auth:
         #     abort(401)
@@ -29,17 +24,24 @@ class MovieView(Resource):
         year = request.args.get('year')
         title = request.args.get('title')
         status = request.args.get('status')
+        page = request.args.get('page')
         data = {
             'director_id': director_id,
             'genre_id': genre_id,
             'year': year,
             'title': title,
-            'status': status
+            'status': status,
+            'page': page
         }
+        # page = current_app.config['PAGE']
         return movie_sterilisations.dump(movie_service.movie_by_query(data))
 
     # @auth_required
     def post(self):
+        """
+
+        :return:
+        """
         auth = request.headers
         if 'Authorization' not in auth:
             abort(401)
@@ -58,16 +60,26 @@ class MovieView(Resource):
 class MovieOne(Resource):
 
     def get(self, uid):
+        """
+
+        :param uid:
+        :return:
+        """
         return movie_sterilisation.dump(movie_service.one_movie(uid))
 
     def put(self, uid):
+        """
+
+        :param uid:
+        :return:
+        """
         auth = request.headers
         if 'Authorization' not in auth:
             abort(401)
         data = auth.get('Authorization')
         token = data.split('Bearer ')[-1]
         answer = auth_user.chek_token(token)
-        if not  answer:
+        if not answer:
             abort(401)
         # elif 'admin' != answer.get('role'):
         #     abort(403)
@@ -76,6 +88,11 @@ class MovieOne(Resource):
         return movie_service.update_movie(update_movie)
 
     def delete(self, uid):
+        """
+
+        :param uid:
+        :return:
+        """
         auth = request.headers
         if 'Authorization' not in auth:
             print('not aut')
@@ -86,11 +103,11 @@ class MovieOne(Resource):
         result = auth_user.chek_token(token)
         print(f'hi{result}')
         if not result:
-            print('not token',result)
+            print('not token', result)
             abort(401)
         # if result.get('role') == 'admin':
         result_delete = movie_service.delete_movie(uid)
         if not result_delete:
             return 'Not movie', 204
         return 'Movie delete', 201
-            # abort(403)
+        # abort(403)

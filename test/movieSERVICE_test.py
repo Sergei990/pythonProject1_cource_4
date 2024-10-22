@@ -94,8 +94,7 @@ class TestMovieService:
     def test_new_movie(self):
         data = {'status': 'new'}
         movie_all = self.movie_test.movie_by_query(data)
-        # for movie in movie_all:
-        #     assert movie.year[0], movie.year == 2002,2001
+
         assert movie_all[0].year == 2002
         assert movie_all[1].year == 2001
 
